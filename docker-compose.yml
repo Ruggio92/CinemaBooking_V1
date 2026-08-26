@@ -1,19 +1,14 @@
 services:
-
-  # Un solo server SQL Server fisico, ma due database logici distinti
-  # (creati dalle migration di ciascun servizio) - non è lo stesso database
-  # condiviso: CatalogDb e BookingDb restano separati, ognuno raggiungibile
-  # solo dal proprio servizio tramite la propria connection string.
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: cinema-sqlserver
     environment:
       ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: "YourStrong@Passw0rd"
+      MSSQL_SA_PASSWORD: Paperino123!
     ports:
       - "1433:1433"
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"YourStrong@Passw0rd\" -C -Q 'SELECT 1' || exit 1"]
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"Paperino123!\" -C -Q 'SELECT 1' || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -29,7 +24,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:8080
-      ConnectionStrings__CatalogDb: "Server=sqlserver,1433;Database=CatalogDb;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True;"
+      ConnectionStrings__CatalogDb: "Server=sqlserver,1433;Database=CatalogDb;User Id=sa;Password=Paperino123!;TrustServerCertificate=True;"
     ports:
       - "5080:8080"
 
@@ -46,7 +41,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:8080
-      ConnectionStrings__BookingDb: "Server=sqlserver,1433;Database=BookingDb;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True;"
+      ConnectionStrings__BookingDb: "Server=sqlserver,1433;Database=BookingDb;User Id=sa;Password=Paperino123!;TrustServerCertificate=True;"
       CatalogApi__BaseUrl: "http://catalog-api:8080"
     ports:
       - "5081:8080"

@@ -1,4 +1,4 @@
-// Ponte tra le varie entità (Sala, Posto, Spettacolo) e le tabelle SQL. Ogni DbSet diventa una tabella e lo schema si genera con le migration EF Core
+// DbContext di Catalog.Api, mappa Sala/Posto/Spettacolo sul database e definisce l'indice univoco sui posti
 
 using Catalog.Api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +8,6 @@ namespace Catalog.Api.Data;
 public class CatalogDbContext : DbContext
 {
     public CatalogDbContext(DbContextOptions<CatalogDbContext> options) : base(options) { }
-
     public DbSet<Sala> Sale => Set<Sala>();
     public DbSet<Posto> Posti => Set<Posto>();
     public DbSet<Spettacolo> Spettacoli => Set<Spettacolo>();

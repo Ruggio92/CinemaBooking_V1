@@ -1,3 +1,5 @@
+// Controller che mostra il dettaglio di un posto, chiamato anche da Booking.Api per validare una prenotazione
+
 using Catalog.Api.Data;
 using Catalog.Api.DTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +17,6 @@ public class PostiController : ControllerBase
         _db = db;
     }
 
-    // Chiamato anche da Booking.Api per validare un posto al momento della prenotazione
     [HttpGet("{id:int}")]
     public async Task<ActionResult<PostoDto>> GetPosto(int id)
     {

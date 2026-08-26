@@ -1,4 +1,4 @@
-// Implementazione ICatalogClient: fa le chiamate HTTP reali verso Catalog.Api
+// Implementazione vera di ICatalogClient, fa le chiamate HTTP reali verso Catalog.Api
 
 using Booking.Api.DTOs;
 

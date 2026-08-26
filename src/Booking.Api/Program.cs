@@ -1,3 +1,5 @@
+// Program.cs di Booking.Api: configura DB, HttpClient verso Catalog, Swagger e applica le migration all'avvio
+
 using Booking.Api.Data;
 using Booking.Api.Services;
 using Microsoft.EntityFrameworkCore;
@@ -5,16 +7,18 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddDbContext<BookingDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("BookingDb")));
 
-// HttpClient per chiamare Catalog.Api. Uso AddHttpClient invece di crearlo a mano perchè così riusa le connessioni già presenti invece di aprirne sempre di nuove
+builder.Services.AddDbContext<BookingDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("BookingDb"),
+        sqlOptions => sqlOptions.EnableRetryOnFailure()));
+
 builder.Services.AddHttpClient<ICatalogClient, CatalogClient>(client =>
 {
     var baseUrl = builder.Configuration["CatalogApi:BaseUrl"]
         ?? throw new InvalidOperationException("CatalogApi:BaseUrl non configurato");
     client.BaseAddress = new Uri(baseUrl);
 });
-
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -28,6 +32,12 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<BookingDbContext>();
+    db.Database.Migrate();
+}
 
 if (app.Environment.IsDevelopment())
 {

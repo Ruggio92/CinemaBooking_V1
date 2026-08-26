@@ -1,5 +1,4 @@
-// Vincolo unico su (SpettacoloId, PostoId): evita doppie prenotazioni anche con richieste simultanee (se SQL rifiuta la seconda insert -> errore 409)
-// Alla cancellazione elimino il PostoPrenotato e la Prenotazione resta come storico con Stato = Cancellata
+// DbContext di Booking.Api, mappa Prenotazione/PostoPrenotato e definisce l'indice che blocca le doppie prenotazioni
 
 using Booking.Api.Models;
 using Microsoft.EntityFrameworkCore;

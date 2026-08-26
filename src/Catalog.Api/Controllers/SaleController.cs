@@ -1,3 +1,5 @@
+// Controller che gestisce le sale: crea, legge, e gestisce anche i posti di ogni sala (creazione e lista)
+
 using Catalog.Api.Data;
 using Catalog.Api.DTOs;
 using Catalog.Api.Models;
