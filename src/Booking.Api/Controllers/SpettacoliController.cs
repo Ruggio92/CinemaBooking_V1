@@ -1,4 +1,4 @@
-// Controller che dice quali posti sono liberi/occupati per uno spettacolo, chiamato prima di far scegliere il posto al cliente come controllo
+// controller che dice quali posti sono liberi o occupati per uno spettacolo
 
 using Booking.Api.Data;
 using Booking.Api.DTOs;

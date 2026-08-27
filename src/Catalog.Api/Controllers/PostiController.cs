@@ -1,4 +1,4 @@
-// Controller che mostra il dettaglio di un posto, chiamato anche da Booking.Api per validare una prenotazione
+// controller che mostra il dettaglio di un posto
 
 using Catalog.Api.Data;
 using Catalog.Api.DTOs;

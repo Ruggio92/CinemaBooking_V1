@@ -1,5 +1,4 @@
-// Collega un posto a una prenotazione, per uno specifico spettacolo. IDPosto NON è una foreign key verso un database, ma un ID "copiato" dal servizio Catalogo
-// La sua validità viene verificata via HTTP al momento della creazione, non dal database
+// collega un posto a una prenotazione per uno specifico spettacolo
 
 namespace Booking.Api.Models;
 

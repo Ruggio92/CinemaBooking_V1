@@ -1,4 +1,4 @@
-// Program.cs di Booking.Api: configura DB, HttpClient verso Catalog, Swagger e applica le migration all'avvio
+// Program.cs di Booking.Api
 
 using Booking.Api.Data;
 using Booking.Api.Services;

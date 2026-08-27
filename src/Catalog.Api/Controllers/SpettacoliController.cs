@@ -1,4 +1,4 @@
-// Controller che gestisce gli spettacoli: crea, legge e controlla che la sala collegata esista davvero
+// controller che gestisce gli spettacoli
 
 using Catalog.Api.Data;
 using Catalog.Api.DTOs;

@@ -1,4 +1,4 @@
-// Un posto fisico all'interno di una sala. Esiste indipendentemente dagli spettacoli: la poltrona "A12" esiste per ogni spettacolo proiettato in quella sala
+// un posto fisico all'interno di una sala
 
 namespace Catalog.Api.Models;
 

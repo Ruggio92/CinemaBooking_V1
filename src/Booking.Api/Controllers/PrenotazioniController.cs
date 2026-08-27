@@ -36,7 +36,7 @@ public class PrenotazioniController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<PrenotazioneDto>> CreaPrenotazione(CreaPrenotazioneRequest request)
+    public async Task<ActionResult<PrenotazioneDto>> CreaPrenotazione(PrenotazioneRequest request)
     {
         var spettacolo = await _catalog.GetSpettacoloAsync(request.SpettacoloId);
         if (spettacolo is null)
@@ -90,6 +90,59 @@ public class PrenotazioniController : ControllerBase
         {
             // posto già prenotato
             return Conflict($"Il posto {postoId} è già stato prenotato per questo spettacolo.");
+        }
+
+        return CreatedAtAction(nameof(GetPrenotazione), new { id = prenotazione.ID }, ToDto(prenotazione));
+    }
+
+    [HttpPost("multiple")]
+    public async Task<ActionResult<PrenotazioneDto>> CreaPrenotazioneMultipla(PrenotazioneMultiplaRequest request)
+    {
+        if (request.PostiIds is null || request.PostiIds.Count == 0)
+            return BadRequest("Specificare almeno un posto.");
+
+        if (request.PostiIds.Distinct().Count() != request.PostiIds.Count)
+            return BadRequest("La lista contiene posti duplicati.");
+
+        var spettacolo = await _catalog.GetSpettacoloAsync(request.SpettacoloId);
+        if (spettacolo is null)
+            return NotFound($"Spettacolo {request.SpettacoloId} non trovato.");
+
+        var postiSala = await _catalog.GetPostiBySalaAsync(spettacolo.SalaId);
+        var postiSalaIds = postiSala.Select(p => p.Id).ToHashSet();
+
+        var postiNonValidi = request.PostiIds.Where(id => !postiSalaIds.Contains(id)).ToList();
+        if (postiNonValidi.Count > 0)
+            return NotFound($"I posti {string.Join(", ", postiNonValidi)} non esistono nella sala di questo spettacolo.");
+
+        // dice quale posto è occupato
+        var occupati = await _db.PostiPrenotati
+            .Where(pp => pp.IDSpettacolo == request.SpettacoloId && request.PostiIds.Contains(pp.IDPosto))
+            .Select(pp => pp.IDPosto)
+            .ToListAsync();
+
+        if (occupati.Count > 0)
+            return Conflict($"I posti {string.Join(", ", occupati)} sono già stati prenotati per questo spettacolo.");
+
+        var prenotazione = new Prenotazione
+        {
+            IDSpettacolo = request.SpettacoloId,
+            NomeCliente = request.NomeCliente,
+            Posti = request.PostiIds
+                .Select(postoId => new PostoPrenotato { IDSpettacolo = request.SpettacoloId, IDPosto = postoId })
+                .ToList()
+        };
+
+        _db.Prenotazioni.Add(prenotazione);
+
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            // caso in cui qualcuno ha prenotato un posto mentre facevo la inser
+            return Conflict("Uno o più posti richiesti sono stati appena prenotati da un'altra richiesta. Riprova.");
         }
 
         return CreatedAtAction(nameof(GetPrenotazione), new { id = prenotazione.ID }, ToDto(prenotazione));

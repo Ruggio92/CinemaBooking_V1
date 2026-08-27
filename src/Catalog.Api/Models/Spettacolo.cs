@@ -1,4 +1,4 @@
-// Uno Spettacolo è l'entità "prenotabile", il servizio Prenotazioni farà sempre riferimento a un IDSpettacolo, mai direttamente a un film o a una sala
+// uno Spettacolo è l'entità prenotabile non la sala
 
 namespace Catalog.Api.Models;
 

@@ -1,8 +1,10 @@
-// DTO per creare una prenotazione e per le risposte dei controller (prenotazione e disponibilità posti)
+// DTO per creare una prenotazione
 
 namespace Booking.Api.DTOs;
 
-public record CreaPrenotazioneRequest(int SpettacoloId, string NomeCliente, int? PostoId);
+public record PrenotazioneRequest(int SpettacoloId, string NomeCliente, int? PostoId);
+
+public record PrenotazioneMultiplaRequest(int SpettacoloId, string NomeCliente, List<int> PostiIds);
 
 public record PrenotazioneDto(int Id, int SpettacoloId, string NomeCliente, DateTime DataCreazione, string Stato, List<int> PostiIds);
 

@@ -1,4 +1,4 @@
-// DTO per lo spettacolo: quello che torna dalle API e quello che serve per crearne uno nuovo
+// DTO per lo spettacolo: quello che torna dalle api e quello che serve per crearne uno nuovo
 
 namespace Catalog.Api.DTOs;
 

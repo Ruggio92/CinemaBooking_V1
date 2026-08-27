@@ -1,4 +1,4 @@
-// DbContext di Catalog.Api, mappa Sala/Posto/Spettacolo sul database e definisce l'indice univoco sui posti
+// DbContext di Catalog.Api che mappa Sala/Posto/Spettacolo sul database e definisce l'indice univoco sui posti
 
 using Catalog.Api.Models;
 using Microsoft.EntityFrameworkCore;

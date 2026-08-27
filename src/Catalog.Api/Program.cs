@@ -1,4 +1,4 @@
-// Program.cs di Catalog.Api: configura DB, Swagger e applica le migration all'avvio
+// Program.cs di Catalog.Api
 
 using Catalog.Api.Data;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +26,7 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
-// Applica le migration all'avvio, così non serve lanciare il comando a mano
+// migration che vengono eseguite all'avvio, così non serve lanciare il comando a mano
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<CatalogDbContext>();

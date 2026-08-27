@@ -1,4 +1,4 @@
-// Vista di Booking su Catalog: DTO separati apposta dai Model originali, sono due servizi indipendenti
+// vista di Booking su Catalog: DTO separati dai model originali perchè sono due servizi indipendetni
 
 namespace Booking.Api.DTOs;
 

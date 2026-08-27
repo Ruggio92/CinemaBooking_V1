@@ -1,4 +1,4 @@
-// DTO per il posto: quello che torna dalle API e quello che serve per crearne uno nuovo in una sala
+// DTO per il posto: quello che torna dalle api e quello che serve per crearne uno nuovo in una sala
 
 namespace Catalog.Api.DTOs;
 

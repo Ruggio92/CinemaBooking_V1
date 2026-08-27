@@ -1,5 +1,4 @@
-// Una prenotazione: un cliente che prenota uno o più posti per uno spettacolo. Una singola Prenotazione può contenere più PostiPrenotati ma resta legata a un solo spettacolo
-// Per prenotare più spettacoli insieme, il client fa più chiamate (una Prenotazione per spettacolo)
+// una prenotazione di uno o più posti per uno spettacolo. Una singola Prenotazione può contenere più PostiPrenotati ma resta legata a un solo spettacolo
 
 namespace Booking.Api.Models;
 

@@ -1,4 +1,4 @@
-// DbContext di Booking.Api, mappa Prenotazione/PostoPrenotato e definisce l'indice che blocca le doppie prenotazioni
+// DbContext di Booking.Api, mappa Prenotazione/PostoPrenotato
 
 using Booking.Api.Models;
 using Microsoft.EntityFrameworkCore;
