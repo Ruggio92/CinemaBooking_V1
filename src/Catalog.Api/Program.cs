@@ -73,9 +73,9 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
-// migration che vengono eseguite all'avvio, così non serve lanciare il comando a mano
-using (var scope = app.Services.CreateScope())
+if (!app.Environment.IsEnvironment("Testing"))
 {
+    using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<CatalogDbContext>();
     db.Database.Migrate();
 }
