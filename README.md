@@ -12,9 +12,15 @@ Ciascun container ha il suo database. Quando Booking riceve una richiesta di pre
 ```
 CinemaBooking.sln
 docker-compose.yml
+.github/
+  workflows/
+    ci.yml         -> build e test automatici ad ogni push
 src/
   Catalog.Api/     -> Sala, Posto, Spettacolo
   Booking.Api/     -> Prenotazione, PostoPrenotato
+tests/
+  Catalog.Api.Tests/
+  Booking.Api.Tests/
 ```
 
 ## API
@@ -77,19 +83,25 @@ Quando Booking chiama Catalog internamente inoltra anche lui il token che ha ric
 
 ## Test
 
-Due progetti xUnit, uno per servizio (tests/Catalog.Api.Tests e tests/Booking.Api.Tests). Per lanciarli, eseguire in un terminale (dalla cartella principale):
+Ho creato due progetti xUnit, uno per servizio (tests/Catalog.Api.Tests e tests/Booking.Api.Tests). Per lanciarli è sufficiente eseguire in un terminale (dalla cartella principale):
 
 ```bash
 dotnet test
 ```
 
-Sono soprattutto test che chiamano davvero gli endpoint, con un database SQLite al posto di SQL Server (così anche i vincoli come i posti duplicati vengono controllati per davvero).
+Sono test che chiamano davvero gli endpoint, con un database SQLite al posto di SQL Server (così anche i vincoli come i posti duplicati vengono controllati per davvero).
 
 Cosa testano:
 
 - Login e creazione dati su Catalog.Api, incluso il rifiuto senza token e il rifiuto quando si prova a creare due volte lo stesso posto
 - Prenotazione multipla su Booking.Api e che se un posto è già occupato non prenota nessuno degli altri presenti nella stessa chiamata
 - Che il token venga generato correttamente
+
+## CI
+
+C'è una pipeline GitHub Actions (`.github/workflows/ci.yml`) che builda il progetto e lancia tutti i test automaticamente ad ogni push. Non serve Docker né SQL Server per farla girare, dato che i test usano SQLite in-memory
+
+Si può vedere direttamente nella tab "Actions" del repository, o il segno di spunta verde o rosso accanto all'ultimo commit nella pagina principale
 
 ## Appunti
 
