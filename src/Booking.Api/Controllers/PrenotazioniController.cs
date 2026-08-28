@@ -1,9 +1,10 @@
-// Controller che gestisce le prenotazioni: crea, legge il dettaglio e cancella. Il POST è la parte più delicata, gestisce anche il conflitto se due richieste arrivano sullo stesso posto insieme
+// controller che gestisce le prenotazioni
 
 using Booking.Api.Data;
 using Booking.Api.DTOs;
 using Booking.Api.Models;
 using Booking.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,7 @@ namespace Booking.Api.Controllers;
 
 [ApiController]
 [Route("api/prenotazioni")]
+[Authorize]
 public class PrenotazioniController : ControllerBase
 {
     private readonly BookingDbContext _db;
@@ -40,7 +42,7 @@ public class PrenotazioniController : ControllerBase
     {
         var spettacolo = await _catalog.GetSpettacoloAsync(request.SpettacoloId);
         if (spettacolo is null)
-            return NotFound($"Spettacolo {request.SpettacoloId} non trovato.");
+            return NotFound($"Spettacolo {request.SpettacoloId} non trovato");
 
         int postoId;
 
@@ -48,10 +50,10 @@ public class PrenotazioniController : ControllerBase
         {
             var posto = await _catalog.GetPostoAsync(request.PostoId.Value);
             if (posto is null)
-                return NotFound($"Posto {request.PostoId} non trovato.");
+                return NotFound($"Posto {request.PostoId} non trovato");
 
             if (posto.SalaId != spettacolo.SalaId)
-                return BadRequest("Il posto non appartiene alla sala di questo spettacolo.");
+                return BadRequest("Il posto non appartiene alla sala di questo spettacolo");
 
             postoId = posto.Id;
         }
@@ -65,7 +67,7 @@ public class PrenotazioniController : ControllerBase
 
             var postoLibero = postiSala.FirstOrDefault(p => !occupati.Contains(p.Id));
             if (postoLibero is null)
-                return Conflict("Nessun posto disponibile per questo spettacolo.");
+                return Conflict("Nessun posto disponibile per questo spettacolo");
 
             postoId = postoLibero.Id;
         }
@@ -89,7 +91,7 @@ public class PrenotazioniController : ControllerBase
         catch (DbUpdateException)
         {
             // posto già prenotato
-            return Conflict($"Il posto {postoId} è già stato prenotato per questo spettacolo.");
+            return Conflict($"Il posto {postoId} è già stato prenotato per questo spettacolo");
         }
 
         return CreatedAtAction(nameof(GetPrenotazione), new { id = prenotazione.ID }, ToDto(prenotazione));
@@ -99,21 +101,21 @@ public class PrenotazioniController : ControllerBase
     public async Task<ActionResult<PrenotazioneDto>> CreaPrenotazioneMultipla(PrenotazioneMultiplaRequest request)
     {
         if (request.PostiIds is null || request.PostiIds.Count == 0)
-            return BadRequest("Specificare almeno un posto.");
+            return BadRequest("Specificare almeno un posto");
 
         if (request.PostiIds.Distinct().Count() != request.PostiIds.Count)
-            return BadRequest("La lista contiene posti duplicati.");
+            return BadRequest("La lista contiene posti duplicati");
 
         var spettacolo = await _catalog.GetSpettacoloAsync(request.SpettacoloId);
         if (spettacolo is null)
-            return NotFound($"Spettacolo {request.SpettacoloId} non trovato.");
+            return NotFound($"Spettacolo {request.SpettacoloId} non trovato");
 
         var postiSala = await _catalog.GetPostiBySalaAsync(spettacolo.SalaId);
         var postiSalaIds = postiSala.Select(p => p.Id).ToHashSet();
 
         var postiNonValidi = request.PostiIds.Where(id => !postiSalaIds.Contains(id)).ToList();
         if (postiNonValidi.Count > 0)
-            return NotFound($"I posti {string.Join(", ", postiNonValidi)} non esistono nella sala di questo spettacolo.");
+            return NotFound($"I posti {string.Join(", ", postiNonValidi)} non esistono nella sala di questo spettacolo");
 
         // dice quale posto è occupato
         var occupati = await _db.PostiPrenotati
@@ -122,7 +124,7 @@ public class PrenotazioniController : ControllerBase
             .ToListAsync();
 
         if (occupati.Count > 0)
-            return Conflict($"I posti {string.Join(", ", occupati)} sono già stati prenotati per questo spettacolo.");
+            return Conflict($"I posti {string.Join(", ", occupati)} sono già stati prenotati per questo spettacolo");
 
         var prenotazione = new Prenotazione
         {
@@ -142,7 +144,7 @@ public class PrenotazioniController : ControllerBase
         catch (DbUpdateException)
         {
             // caso in cui qualcuno ha prenotato un posto mentre facevo la inser
-            return Conflict("Uno o più posti richiesti sono stati appena prenotati da un'altra richiesta. Riprova.");
+            return Conflict("Uno o più posti richiesti sono stati appena prenotati da un'altra richiesta. Riprovare");
         }
 
         return CreatedAtAction(nameof(GetPrenotazione), new { id = prenotazione.ID }, ToDto(prenotazione));
@@ -159,7 +161,7 @@ public class PrenotazioniController : ControllerBase
             return NotFound();
 
         if (prenotazione.Stato == StatoPrenotazione.Cancellata)
-            return BadRequest("Prenotazione già cancellata.");
+            return BadRequest("Prenotazione già cancellata");
 
         _db.PostiPrenotati.RemoveRange(prenotazione.Posti);
         prenotazione.Stato = StatoPrenotazione.Cancellata;

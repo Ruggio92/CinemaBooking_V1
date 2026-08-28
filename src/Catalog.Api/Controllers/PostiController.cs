@@ -2,12 +2,14 @@
 
 using Catalog.Api.Data;
 using Catalog.Api.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.Api.Controllers;
 
 [ApiController]
 [Route("api/posti")]
+[Authorize]
 public class PostiController : ControllerBase
 {
     private readonly CatalogDbContext _db;

@@ -1,4 +1,4 @@
-// Implementazione vera di ICatalogClient, fa le chiamate HTTP reali verso Catalog.Api
+// implementazione vera di ICatalogClient
 
 using Booking.Api.DTOs;
 
@@ -17,7 +17,7 @@ public class CatalogClient : ICatalogClient
     {
         var response = await _httpClient.GetAsync($"/api/spettacoli/{spettacoloId}", ct);
 
-        // 404 è una risposta legittima (lo spettacolo non esiste), la tratto come "non trovato"
+        // 404 è una risposta legittima, la tratto come "non trovato"
         if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             return null;
 

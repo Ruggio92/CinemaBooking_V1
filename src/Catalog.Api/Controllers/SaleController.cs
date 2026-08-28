@@ -3,6 +3,7 @@
 using Catalog.Api.Data;
 using Catalog.Api.DTOs;
 using Catalog.Api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,7 @@ namespace Catalog.Api.Controllers;
 
 [ApiController]
 [Route("api/sale")]
+[Authorize]
 public class SaleController : ControllerBase
 {
     private readonly CatalogDbContext _db;
@@ -81,7 +83,7 @@ public class SaleController : ControllerBase
         }
         catch (DbUpdateException)
         {
-            // Violazione dell'indice univoco (SalaId, Fila, Numero) - il posto è già occupato per questa sala
+            // il posto è già occupato per questa sala
             return Conflict($"Il posto {request.Fila}{request.Numero} esiste già nella sala {salaId}.");
         }
 

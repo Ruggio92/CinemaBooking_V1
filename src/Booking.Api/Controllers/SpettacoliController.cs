@@ -3,6 +3,7 @@
 using Booking.Api.Data;
 using Booking.Api.DTOs;
 using Booking.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,7 @@ namespace Booking.Api.Controllers;
 
 [ApiController]
 [Route("api/spettacoli")]
+[Authorize]
 public class SpettacoliController : ControllerBase
 {
     private readonly BookingDbContext _db;

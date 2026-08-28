@@ -25,6 +25,12 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:8080
       ConnectionStrings__CatalogDb: "Server=sqlserver,1433;Database=CatalogDb;User Id=sa;Password=Paperino123!;TrustServerCertificate=True;"
+      Jwt__Key: "CinemaBooking-Chiave-Condivisa-Per-Firma-JWT-2026"
+      Jwt__Issuer: "CinemaBooking"
+      Jwt__Audience: "CinemaBookingApi"
+      Jwt__ExpiryMinutes: "60"
+      Auth__Username: "sa"
+      Auth__Password: "Paperino123!"
     ports:
       - "5080:8080"
 
@@ -43,5 +49,9 @@ services:
       ASPNETCORE_URLS: http://+:8080
       ConnectionStrings__BookingDb: "Server=sqlserver,1433;Database=BookingDb;User Id=sa;Password=Paperino123!;TrustServerCertificate=True;"
       CatalogApi__BaseUrl: "http://catalog-api:8080"
+      Jwt__Key: "CinemaBooking-Chiave-Condivisa-Per-Firma-JWT-2026"
+      Jwt__Issuer: "CinemaBooking"
+      Jwt__Audience: "CinemaBookingApi"
+      Jwt__ExpiryMinutes: "60"
     ports:
       - "5081:8080"

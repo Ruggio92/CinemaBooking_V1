@@ -3,6 +3,7 @@
 using Catalog.Api.Data;
 using Catalog.Api.DTOs;
 using Catalog.Api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,7 @@ namespace Catalog.Api.Controllers;
 
 [ApiController]
 [Route("api/spettacoli")]
+[Authorize]
 public class SpettacoliController : ControllerBase
 {
     private readonly CatalogDbContext _db;
